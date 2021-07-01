@@ -123,12 +123,6 @@ function filterJsonNotTranslated(rlParse, rrParse) {
       } else {
         console.log(`> Insert the parameter 3 - file_name param`);
       }
-    } else if (!paramInput[2]) {
-      console.log(`> Insert the parameter 2 - type param`);
-    } else if (!paramInput[3]) {
-      console.log(`> Insert the parameter 3 - type param`);
-    } else if (!paramInput[4]) {
-      console.log(`> Insert the parameter 4 - type param`);
     } else if (e === 'Param2NotFound') {
       console.log(`> Parameter 2 not found`);
     } else if (e === 'Param3NotFound') {
