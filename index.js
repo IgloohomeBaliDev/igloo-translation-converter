@@ -49,6 +49,10 @@ function filterJsonNotTranslated(rlParse, rrParse) {
   });
   
   try {
+    if (!fs.existsSync(`output`)) {
+      fs.mkdirSync(`output`);
+    }
+
     if (paramInput[2] === 'find-not-translate') {
       if (!paramInput[3]) {
         throw 'Param3NotFound';
