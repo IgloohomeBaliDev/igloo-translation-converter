@@ -31,4 +31,4 @@ Run this command for convert the translated data from translator's (.csv/.json) 
 
 ### Report bug
 ---
-Report bug to this [link](https://github.com/IgloohomeBaliDev/igloo-translation-converter/issues)
+Report bug to this [link](https://github.com/IgloohomeBaliDev/igloo-translation-converter/issues) then create new issue.
