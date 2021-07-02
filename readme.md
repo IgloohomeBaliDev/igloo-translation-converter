@@ -1,11 +1,12 @@
 ## DOCUMENTATION 
----
+
 ### Requirement
+---
 - Node.js
 - NPM
  
----
 ### Run
+---
 #### [find-not-translate]
 Run this command if you will to get the translation list that is not translated yet, and need to give .csv or .json file to translator.
 
