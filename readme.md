@@ -6,7 +6,7 @@
  
 ---
 ### Run
-#### find-not-translate
+#### [find-not-translate]
 Run this command if you will to get the translation list that is not translated yet, and need to give .csv or .json file to translator.
 
 1. add file **en.json** for the main file translation inside `input/find-not-translate` directory, main file name should be en.json and the content is using english
@@ -16,7 +16,7 @@ Run this command if you will to get the translation list that is not translated 
     - *file_name*, file comparison name (.json)
 4. the result will be on `output/result-{type}` directory, the output is translation file from .json (apps) that not translate yet, output result will be .csv & .json
 
-#### csv-to-json
+#### [csv-to-json]
 Run this command for convert the translated data from translator's (.csv/.json) file back to your apps i18n.
 
 1. add translated .csv file & translation source .json inside `input/csv-to-json` directory
