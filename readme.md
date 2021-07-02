@@ -8,7 +8,7 @@
 ### Run
 ---
 #### [find-not-translate]
-Run this command if you will to get the translation list that is not translated yet, and need to give .csv or .json file to translator.
+Run this command if you will get the translation list that is not translated yet, and need to convert and give .csv or .json file to translator.
 
 1. add file **en.json** for the main file translation inside `input/find-not-translate` directory, main file name should be en.json and the content is using english
 2. add the translation file on `input/find-not-translate` directory, for example: ja.json
