@@ -28,3 +28,7 @@ Run this command for convert the translated data from translator's (.csv/.json) 
     - *source_file*, translation source file (.json)
 3. The result will be on `output/result-{type}` directory, file that already translate by translator to .json (apps)
 4. Add translation file to your apps.
+
+### Report bug
+---
+Report bug to this [link](https://github.com/IgloohomeBaliDev/igloo-translation-converter/issues)
