@@ -41,6 +41,32 @@ function filterJsonNotTranslated(rlParse, rrParse) {
 }
 
 // csv-to-json
+function convertBackToJSON(result, mapNewLine, type) {
+  if (type === '.csv') {
+    mapNewLine.map((data, index) => {
+      if (index > 0) {
+        if (!!data) {
+          const splitData = data.split(',');
+          const key = splitData[0].substr(1).substr(0, (splitData[0].length - 2));
+          const value = splitData[1].substr(1).substr(0, (splitData[1].length - 2));
+          
+          result[key] = value;
+        }
+      }
+    });
+  } else if (type === '.json') {
+    for (let key in mapNewLine) {
+      if (mapNewLine.hasOwnProperty(key)) {
+        const rkey = key;
+        const rvalue = mapNewLine[key];
+
+        result[rkey] = rvalue;
+      }
+    }
+  }
+
+  return result;
+}
 
 (async () => {
   let paramInput = [];
@@ -86,25 +112,29 @@ function filterJsonNotTranslated(rlParse, rrParse) {
         throw 'Param4NotFound';
       }
 
+      // Get extension
+      const gotExtensionCSV = paramInput[3].slice(-4);
+      const gotExtensionJSON = paramInput[3].slice(-5);
+
       // CSV translated to JSON (Apps)
       const readFileSync = fs.readFileSync(`input/${paramInput[2]}/${paramInput[3]}`, 'utf8');
       const readSourceFileSync = fs.readFileSync(`input/${paramInput[2]}/${paramInput[4]}`, 'utf8');
-      const mapNewLine = readFileSync.split('\r\n');
+      
+      let mapNewLine;
+      let currentExtension;
+
+      if (gotExtensionCSV === '.csv') {
+        mapNewLine = readFileSync.split('\r\n');
+        currentExtension = gotExtensionCSV;
+      } else if (gotExtensionJSON === '.json') {
+        mapNewLine = JSON.parse(readFileSync);
+        currentExtension = gotExtensionJSON;
+      } else {
+        throw 'ParamExtensionNotAllowed';
+      }
+
       const sourceParse = JSON.parse(readSourceFileSync);
-
-      let result = sourceParse;
-
-      mapNewLine.map((data, index) => {
-        if (index > 0) {
-          if (!!data) {
-            const splitData = data.split(',');
-            const key = splitData[0].substr(1).substr(0, (splitData[0].length - 2));
-            const value = splitData[1].substr(1).substr(0, (splitData[1].length - 2));
-            
-            result[key] = value;
-          }
-        }
-      });
+      const result = convertBackToJSON(sourceParse, mapNewLine, currentExtension);
 
       if (!fs.existsSync(`output/result-${paramInput[2]}`)) {
         fs.mkdirSync(`output/result-${paramInput[2]}`);
@@ -133,6 +163,8 @@ function filterJsonNotTranslated(rlParse, rrParse) {
       console.log(`> Parameter 3 not found`);
     } else if (e === 'Param4NotFound') {
       console.log(`> Parameter 4 not found`);
+    } else if (e === 'ParamExtensionNotAllowed') {
+      console.log(`> Parameter 3 file_name/translated file should be .csv or .json`);
     } else {
       console.log(`> Undefined error`);
       console.log(`-- Error details --`);
