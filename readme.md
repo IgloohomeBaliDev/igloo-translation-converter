@@ -22,7 +22,7 @@ Run this command if you will get the translation list that is not translated yet
 Run this command for convert the translated data from translator's (.csv/.json) file back to your apps i18n.
 
 1. Add translated .csv file & translation source .json inside `input/csv-to-json` directory
-2. Run **'node index.js {type} {file_name} {source_file}'** on terminal/cmd, example: **'node index.js csv-to-json translated.csv ja.json'**
+2. Run **'node index.js {type} {file_name} {source_file}'** on terminal/cmd, example: **'node index.js csv-to-json translated.csv ja.json'** or **'node index.js csv-to-json translated.json ja.json'**
     - *type*, csv-to-json
     - *file_name*, translated file name (.csv/.json)
     - *source_file*, translation source file (.json)
