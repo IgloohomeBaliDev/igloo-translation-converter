@@ -15,7 +15,7 @@ Run this command if you will get the translation list that is not translated yet
 3. Run **'node index.js {type} {file_name}'** on terminal/cmd, example: **'node index.js find-not-translate ja.json'** 
     - *type*, find-not-translate
     - *file_name*, file comparison name (.json)
-4. The result will be on `output/result-{type}` directory, the output is translation file from .json (apps) that not translate yet, output result will be .csv & .json
+4. The result will be on `output/result-find-not-translate` directory, the output is translation file from .json (apps) that not translate yet, output result will be .csv & .json
 5. Give the file to your translator.
 
 #### [csv-to-json]
@@ -26,8 +26,20 @@ Run this command for convert the translated data from translator's (.csv/.json) 
     - *type*, csv-to-json
     - *file_name*, translated file name (.csv/.json)
     - *source_file*, translation source file (.json)
-3. The result will be on `output/result-{type}` directory, file that already translate by translator to .json (apps)
+3. The result will be on `output/result-csv-to-json` directory, file that already translate by translator to .json (apps)
 4. Add translation file to your apps.
+
+#### [nested-param-to-one]
+Run this command for change nested key/parameter on translation file to the one line
+
+1. Add translation file .json on `input/nested-param-to-one` directory, you can add all translation file into this directory
+2. Run **'node index.js {type}'** on terminal/cmd, example: **'node index.js nested-param-to-one'**
+    - *type*, nested-param-to-one
+3. The result will be on `outpun/result-nested-param-to-one` directory, total file on the output directory will be same as the input
+4. Copy all file on the output directory to your apps
+
+### Example note
+You can remove all **example file** inside input directory, but don't remove the `csv-to-json`, `find-not-translate`, & `nested-param-to-one` directory
 
 ### Report bug
 ---

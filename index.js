@@ -1,6 +1,89 @@
 // Read the readme.md for Documentation
-
 const fs = require('fs');
+const path = require('path');
+
+// fs Sync Recursive
+// src: https://gist.github.com/aditAtSinTask/6f7832b48e9ebe1d37ab9ac1791b6291
+class FsSyncRecursive {
+  dirName = __dirname;
+
+  r(pathDir, opts, deep) {
+    opts = {
+      returnFilePath: false,
+      hierarchy: true,
+      fileInfo: false,
+      ...opts
+    };
+
+    deep = !deep ? 0 : deep;
+
+    let result = [];
+    const readdirResult = fs.readdirSync(pathDir);
+
+    readdirResult.map((data) => {
+      const currentFilePath = path.resolve(pathDir, data);
+      const fileStat = fs.statSync(currentFilePath);
+      
+      if (fileStat && fileStat.isDirectory()) {
+        const recursiveRecursive = this.r(currentFilePath, opts, (deep + 1));
+        if (opts.hierarchy) {
+          result = [
+            ...result,
+            recursiveRecursive
+          ];
+        } else {
+          result = [
+            ...result,
+            ...recursiveRecursive
+          ];
+        }
+      } else {
+        if (opts.fileInfo) {
+          result = [
+            ...result,
+            {
+              fullPath: pathDir,
+              path: pathDir.replace(this.dirName, ''),
+              filename: data,
+              deep: deep
+            }
+          ];
+        } else {
+          result = [
+            ...result,
+            opts.returnFilePath ? currentFilePath : data
+          ];
+        }
+      }
+    });
+
+    return result;
+  }
+
+  d(pathDir, deep) {
+    let splitPathFile = pathDir.split('\/');
+
+    deep = !deep ? 0 : deep;
+
+    if (!fs.existsSync(pathDir)) {
+      try {
+        fs.mkdirSync(pathDir);
+      } catch (e) {
+        splitPathFile.pop();
+        splitPathFile = splitPathFile.join('\/');
+        this.d(splitPathFile, (deep - 1));
+        this.d(pathDir, deep);
+      }
+    }
+  }
+
+  w(pathFile, filename, content) {
+    this.d(pathFile);
+    fs.writeFileSync(`${pathFile}/${filename}`, content);
+
+    return;
+  }
+}
 
 // find-not-translate
 function convertToCSV(objArray) {
@@ -68,6 +151,34 @@ function convertBackToJSON(result, mapNewLine, type) {
   return result;
 }
 
+// nested-param-to-one
+function nestedObjectToDot(object, currentKey) {
+  let result = {};
+
+  for (let key in object) {
+    if (object.hasOwnProperty(key)) {
+      const rkey = key;
+      const rvalue = object[key];
+      let finalKey = rkey;
+
+      if (!!currentKey) {
+        finalKey = `${currentKey}.${rkey}`;
+      }
+
+      if (typeof(rvalue) === 'string') {
+        result[finalKey] = rvalue;
+      } else if (typeof(rvalue) === 'object') {
+        result = {
+          ...result,
+          ...nestedObjectToDot(rvalue, finalKey)
+        };
+      }
+    }
+  }
+
+  return result;
+}
+
 (async () => {
   let paramInput = [];
   process.argv.forEach(function (val, index) {
@@ -105,6 +216,8 @@ function convertBackToJSON(result, mapNewLine, type) {
 
       fs.writeFileSync(`output/result-${paramInput[2]}/result.json`, JSON.stringify(result, null, 2));
       fs.writeFileSync(`output/result-${paramInput[2]}/result.csv`, convertToCSV(result));
+
+      console.log(`Finished! please check output/result-${paramInput[2]} directory`);
     } else if (paramInput[2] === 'csv-to-json') {
       if (!paramInput[3]) {
         throw 'Param3NotFound';
@@ -145,6 +258,46 @@ function convertBackToJSON(result, mapNewLine, type) {
       }
 
       fs.writeFileSync(`output/result-${paramInput[2]}/result.json`, JSON.stringify(result, null, 2));
+      
+      console.log(`Finished! please check output/result-${paramInput[2]} directory`);
+    } else if (paramInput[2] === 'nested-param-to-one') {
+      const fsr = new FsSyncRecursive();
+      const fileSyncRecursiveResult = fsr.r(`input/${paramInput[2]}`, {
+        returnFilePath: true,
+        hierarchy: false,
+        fileInfo: true
+      });
+
+      if (!fs.existsSync(`output/result-${paramInput[2]}`)) {
+        fs.mkdirSync(`output/result-${paramInput[2]}`);
+      } else {
+        const fileOutputSyncRecursiveResult = fsr.r(`output/result-${paramInput[2]}`, {
+          returnFilePath: true,
+          hierarchy: false,
+          fileInfo: true
+        });
+       
+        fileOutputSyncRecursiveResult.map((data) => {
+          const path = data.path;
+          const filename = data.filename;
+
+          fs.unlinkSync(`${path}/${filename}`);
+        });
+      }
+
+      fileSyncRecursiveResult.map((data) => {
+        const path = data.path;
+        const filename = data.filename;
+
+        if (filename.slice(-5) === '.json') {
+          const readFileSync = fs.readFileSync(`${path}/${filename}`, 'utf8');
+          const newResult = nestedObjectToDot(JSON.parse(readFileSync), '');
+
+          fs.writeFileSync(`output/result-${paramInput[2]}/${filename}`, JSON.stringify(newResult, null, 2));
+        }
+      });
+
+      console.log(`Finished! please check output/result-${paramInput[2]} directory`);
     } else {
       throw 'Param2NotFound';
     }

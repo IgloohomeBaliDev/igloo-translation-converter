@@ -1,0 +1,24 @@
+{
+  "actions":{
+    "Login":"Sign In",
+    "Register":"Register",
+    "Email":"Email",
+    "Your email":"your@email.com",
+    "Reset Password":"Reset Password"
+  },
+  "nested": {
+    "lv1": {
+      "lv2Val1": "Value 1 from nested",
+      "lv2Val2": "Value 2 from nested"
+    },
+    "lv1Value": "Nested from lv1 value"
+  },
+  "Pair new lock":"Pair new lock",
+  "Request Instant Access":"Request Instant Access",
+  "Go to visit page":"Go to visit page",
+  "Add lock":"Add Lock",
+  "Manage Homes":"Manage Properties",
+  "Claim Bluetooth Key":"Claim Bluetooth Key",
+  "Manage Locks":"Manage Locks",
+  "Scan QR code to add key":"Scan QR code to add key"
+}
