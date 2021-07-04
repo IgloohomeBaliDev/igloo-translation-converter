@@ -1,13 +1,13 @@
-## DOCUMENTATION 
+# DOCUMENTATION 
 
-### Requirement
+## Requirement
 ---
 - Node.js
 - NPM
  
-### Run
+## Run
 ---
-#### [find-not-translate]
+### [find-not-translate]
 Run this command if you will get the translation list that is not translated yet, and need to convert and give .csv or .json file to translator.
 
 1. Add file **en.json** for the main file translation inside `input/find-not-translate` directory, main file name should be en.json and the content is using english
@@ -18,7 +18,7 @@ Run this command if you will get the translation list that is not translated yet
 4. The result will be on `output/result-find-not-translate` directory, the output is translation file from .json (apps) that not translate yet, output result will be .csv & .json
 5. Give the file to your translator.
 
-#### [csv-to-json]
+### [csv-to-json]
 Run this command for convert the translated data from translator's (.csv/.json) file back to your apps i18n.
 
 1. Add translated .csv file & translation source .json inside `input/csv-to-json` directory
@@ -29,7 +29,7 @@ Run this command for convert the translated data from translator's (.csv/.json) 
 3. The result will be on `output/result-csv-to-json` directory, file that already translate by translator to .json (apps)
 4. Add translation file to your apps.
 
-#### [nested-param-to-one]
+### [nested-param-to-one]
 Run this command for change nested key/parameter on translation file to the one line
 
 1. Add translation file .json on `input/nested-param-to-one` directory, you can add all translation file into this directory
@@ -38,9 +38,10 @@ Run this command for change nested key/parameter on translation file to the one 
 3. The result will be on `outpun/result-nested-param-to-one` directory, total file on the output directory will be same as the input
 4. Copy all file on the output directory to your apps
 
-### Example note
+## Example note
+---
 You can remove all **example file** inside input directory, but don't remove the `csv-to-json`, `find-not-translate`, & `nested-param-to-one` directory
 
-### Report bug
+## Report bug
 ---
 Report bug to this [link](https://github.com/IgloohomeBaliDev/igloo-translation-converter/issues) then create new issue.
