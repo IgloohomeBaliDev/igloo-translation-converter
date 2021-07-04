@@ -1,12 +1,10 @@
 # DOCUMENTATION 
 
 ## Requirement
----
 - Node.js
 - NPM
  
 ## Run
----
 ### [find-not-translate]
 Run this command if you will get the translation list that is not translated yet, and need to convert and give .csv or .json file to translator.
 
@@ -39,9 +37,7 @@ Run this command for change nested key/parameter on translation file to the one 
 4. Copy all file on the output directory to your apps
 
 ## Example note
----
 You can remove all **example file** inside input directory, but don't remove the `csv-to-json`, `find-not-translate`, & `nested-param-to-one` directory
 
 ## Report bug
----
 Report bug to this [link](https://github.com/IgloohomeBaliDev/igloo-translation-converter/issues) then create new issue.
