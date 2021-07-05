@@ -198,25 +198,67 @@ function nestedObjectToDot(object, currentKey) {
  
       // Find not translate yet
       const readLeftFileSync = fs.readFileSync(`input/${paramInput[2]}/en.json`, 'utf8');
-      const readRightileSync = fs.readFileSync(`input/${paramInput[2]}/${paramInput[3]}`, 'utf8');
-
       const rlParse = JSON.parse(readLeftFileSync);
-      const rrParse = JSON.parse(readRightileSync);
-      const result = filterJsonNotTranslated(rlParse, rrParse);
 
-      if (!fs.existsSync(`output/result-${paramInput[2]}`)) {
-        fs.mkdirSync(`output/result-${paramInput[2]}`);
+      if (paramInput[3] !== 'all') {
+        const readRightFileSync = fs.readFileSync(`input/${paramInput[2]}/${paramInput[3]}`, 'utf8');
+  
+        const rrParse = JSON.parse(readRightFileSync);
+        const result = filterJsonNotTranslated(rlParse, rrParse);
 
-        if (!!fs.existsSync(`output/result-${paramInput[2]}/result.json`)) {
-          fs.unlinkSync(`output/result-${paramInput[2]}/result.json`);
+        if (!fs.existsSync(`output/result-${paramInput[2]}`)) {
+          fs.mkdirSync(`output/result-${paramInput[2]}`);
+        } else {
+          if (!!fs.existsSync(`output/result-${paramInput[2]}/result.json`)) {
+            fs.unlinkSync(`output/result-${paramInput[2]}/result.json`);
+          }
+          if (!!fs.existsSync(`output/result-${paramInput[2]}/result.csv`)) {
+            fs.unlinkSync(`output/result-${paramInput[2]}/result.csv`);
+          }
         }
-        if (!!fs.existsSync(`output/result-${paramInput[2]}/result.csv`)) {
-          fs.unlinkSync(`output/result-${paramInput[2]}/result.csv`);
+
+        fs.writeFileSync(`output/result-${paramInput[2]}/result.json`, JSON.stringify(result, null, 2));
+        fs.writeFileSync(`output/result-${paramInput[2]}/result.csv`, convertToCSV(result));
+      } else {
+        const fsr = new FsSyncRecursive();
+        const fileSyncRecursiveResult = fsr.r(`input/${paramInput[2]}`, {
+          returnFilePath: true,
+          hierarchy: false,
+          fileInfo: true
+        });
+
+        if (!fs.existsSync(`output/result-${paramInput[2]}`)) {
+          fs.mkdirSync(`output/result-${paramInput[2]}`);
         }
+
+        fileSyncRecursiveResult.map((data) => {
+          const rpath = data.fullPath;
+          const filename = data.filename;
+          const gotExtensionJSON = filename.slice(-5);
+
+          let filenameWithoutExtension = filename.split('.');
+          filenameWithoutExtension.pop();
+          filenameWithoutExtension = filenameWithoutExtension.join('.');
+
+          if (!!fs.existsSync(`output/result-${paramInput[2]}`)) {
+            if (!!fs.existsSync(`output/result-${paramInput[2]}/result-${filenameWithoutExtension}.json`)) {
+              fs.unlinkSync(`output/result-${paramInput[2]}/result-${filenameWithoutExtension}.json`);
+            }
+            if (!!fs.existsSync(`output/result-${paramInput[2]}/result-${filenameWithoutExtension}.csv`)) {
+              fs.unlinkSync(`output/result-${paramInput[2]}/result-${filenameWithoutExtension}.csv`);
+            }
+          }
+
+          if (gotExtensionJSON === '.json' && filename !== 'en.json') {
+            const readRightFileSync = fs.readFileSync(`${rpath}/${filename}`, 'utf8');
+            const rrParse = JSON.parse(readRightFileSync);
+            const result = filterJsonNotTranslated(rlParse, rrParse);
+
+            fs.writeFileSync(`output/result-${paramInput[2]}/result-${filenameWithoutExtension}.json`, JSON.stringify(result, null, 2));
+            fs.writeFileSync(`output/result-${paramInput[2]}/result-${filenameWithoutExtension}.csv`, convertToCSV(result));
+          }
+        });
       }
-
-      fs.writeFileSync(`output/result-${paramInput[2]}/result.json`, JSON.stringify(result, null, 2));
-      fs.writeFileSync(`output/result-${paramInput[2]}/result.csv`, convertToCSV(result));
 
       console.log(`Finished! please check output/result-${paramInput[2]} directory`);
     } else if (paramInput[2] === 'csv-to-json') {

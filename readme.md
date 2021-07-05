@@ -12,7 +12,10 @@ Run this command if you will get the translation list that is not translated yet
 2. Add the translation file on `input/find-not-translate` directory, for example: ja.json
 3. Run **'node index.js {type} {file_name}'** on terminal/cmd, example: **'node index.js find-not-translate ja.json'** 
     - *type*, find-not-translate
-    - *file_name*, file comparison name (.json)
+    - *file_name*, 
+        -   [option 1] file comparison name (.json) for example: **ja.json**
+        -   [option 2] if you have more than 1 file, give value 'all' and it will process all file 
+            inside the `input/find-not-translate`
 4. The result will be on `output/result-find-not-translate` directory, the output is translation file from .json (apps) that not translate yet, output result will be .csv & .json
 5. Give the file to your translator.
 
