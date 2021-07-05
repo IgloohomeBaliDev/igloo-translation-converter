@@ -279,7 +279,7 @@ function nestedObjectToDot(object, currentKey) {
         });
        
         fileOutputSyncRecursiveResult.map((data) => {
-          const rpath = data.path;
+          const rpath = data.fullPath;
           const filename = data.filename;
 
           fs.unlinkSync(`${rpath}/${filename}`);
@@ -287,7 +287,7 @@ function nestedObjectToDot(object, currentKey) {
       }
 
       fileSyncRecursiveResult.map((data) => {
-        const rpath = data.path;
+        const rpath = data.fullPath;
         const filename = data.filename;
 
         if (filename.slice(-5) === '.json') {
@@ -308,11 +308,10 @@ function nestedObjectToDot(object, currentKey) {
       });
 
       fileSyncRecursiveResult.map((data) => {
-        const rpath = data.path;
+        const rpath = data.fullPath;
         const filename = data.filename;
 
-        // fs.unlinkSync(`${rpath}/${filename}`);
-        console.log('>>> ', data);
+        fs.unlinkSync(`${rpath}/${filename}`);
       });
 
       console.log(`Finished! all input are deleted`);
