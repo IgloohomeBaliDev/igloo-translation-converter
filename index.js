@@ -44,6 +44,7 @@ class FsSyncRecursive {
             {
               fullPath: pathDir,
               path: pathDir.replace(this.dirName, ''),
+              pathNoRoot: pathDir.substr(0, 1) === '\/',
               filename: data,
               deep: deep
             }
@@ -278,19 +279,19 @@ function nestedObjectToDot(object, currentKey) {
         });
        
         fileOutputSyncRecursiveResult.map((data) => {
-          const path = data.path;
+          const rpath = data.path;
           const filename = data.filename;
 
-          fs.unlinkSync(`${path}/${filename}`);
+          fs.unlinkSync(`${rpath}/${filename}`);
         });
       }
 
       fileSyncRecursiveResult.map((data) => {
-        const path = data.path;
+        const rpath = data.path;
         const filename = data.filename;
 
         if (filename.slice(-5) === '.json') {
-          const readFileSync = fs.readFileSync(`${path}/${filename}`, 'utf8');
+          const readFileSync = fs.readFileSync(`${rpath}/${filename}`, 'utf8');
           const newResult = nestedObjectToDot(JSON.parse(readFileSync), '');
 
           fs.writeFileSync(`output/result-${paramInput[2]}/${filename}`, JSON.stringify(newResult, null, 2));
@@ -298,6 +299,23 @@ function nestedObjectToDot(object, currentKey) {
       });
 
       console.log(`Finished! please check output/result-${paramInput[2]} directory`);
+    } else if (paramInput[2] === 'clean-all-input') {
+      const fsr = new FsSyncRecursive();
+      const fileSyncRecursiveResult = fsr.r(`input`, {
+        returnFilePath: true,
+        hierarchy: false,
+        fileInfo: true
+      });
+
+      fileSyncRecursiveResult.map((data) => {
+        const rpath = data.path;
+        const filename = data.filename;
+
+        // fs.unlinkSync(`${rpath}/${filename}`);
+        console.log('>>> ', data);
+      });
+
+      console.log(`Finished! all input are deleted`);
     } else {
       throw 'Param2NotFound';
     }
